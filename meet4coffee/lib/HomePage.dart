@@ -236,7 +236,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           MaterialPageRoute(
                               builder: (context) =>
                                   StreamProvider<Workspace>.value(
-                                      initialData: Workspace(),
+                                      initialData: Workspace(
+                                          coffeeBreaks: {},
+                                          workoutBreaks: {},
+                                          gameBreaks: {}),
                                       value:
                                           DatabaseService().workspaceDataStream,
                                       builder: (context, snapshot) {
