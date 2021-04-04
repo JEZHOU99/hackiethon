@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:meet4coffee/CallPage.dart';
+import 'package:meet4coffee/RoomTile.dart';
 import 'package:provider/provider.dart';
 import 'package:meet4coffee/utilities.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class RoomPage extends StatefulWidget {
   RoomPage({Key key, this.roomType, this.icon, this.user}) : super(key: key);
@@ -33,22 +32,6 @@ class _RoomPageState extends State<RoomPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     String roomName = "";
     String role = "";
-
-    final PermissionHandler _permissionHandler = PermissionHandler();
-
-    Future<void> onJoin() async {
-      await _permissionHandler.requestPermissions(
-          [PermissionGroup.camera, PermissionGroup.microphone]);
-
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CallPage(
-            channelName: roomName,
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       backgroundColor: mainBrown,
@@ -410,49 +393,10 @@ class _RoomPageState extends State<RoomPage> {
     return ListView.builder(
       itemCount: roomList.length,
       itemBuilder: (BuildContext context, int index) {
-        return Stack(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ListTile(
-                  title: Text(roomList[index]),
-                  subtitle: Text(rooms[roomList[index]][1].toString()),
-                  trailing: Text(rooms[roomList[index]][0].toString()),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: ListTile(),
-                        ),
-                      ),
-                    )),
-              ),
-            ),
-          ],
+        return RoomTile(
+          index: index,
+          roomList: roomList,
+          rooms: rooms,
         );
       },
     );
