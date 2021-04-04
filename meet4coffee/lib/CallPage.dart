@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
+import 'package:meet4coffee/database.dart';
 import 'package:meet4coffee/utilities.dart';
 
 class CallPage extends StatefulWidget {
@@ -13,8 +14,19 @@ class CallPage extends StatefulWidget {
   /// non-modifiable client role of the page
   final ClientRole role;
 
+  final Profile user;
+  final String roomType;
+  final Map roomsList;
+
   /// Creates a call page with given channel name.
-  const CallPage({Key key, this.channelName, this.role}) : super(key: key);
+  const CallPage(
+      {Key key,
+      this.channelName,
+      this.role,
+      this.user,
+      this.roomType,
+      this.roomsList})
+      : super(key: key);
 
   @override
   _CallPageState createState() => _CallPageState();
@@ -78,7 +90,7 @@ class _CallPageState extends State<CallPage> {
         final info = 'onError: $code';
         _infoStrings.add(info);
       });
-    }, joinChannelSuccess: (channel, uid, elapsed) {
+    }, joinChannelSuccess: (channel, uid, elapsed) async {
       setState(() {
         final info = 'onJoinChannel: $channel, uid: $uid';
         _infoStrings.add(info);
@@ -120,7 +132,12 @@ class _CallPageState extends State<CallPage> {
 
   /// Video view wrapper
   Widget _videoView(view) {
-    return Expanded(child: Container(child: view));
+    return Expanded(
+        child: Stack(
+      children: [
+        Container(child: view),
+      ],
+    ));
   }
 
   /// Video view row wrapper
@@ -272,6 +289,7 @@ class _CallPageState extends State<CallPage> {
   }
 
   void _onCallEnd(BuildContext context) {
+    leaveRoom(widget.channelName, widget.roomType, widget.roomsList);
     Navigator.pop(context);
   }
 
@@ -289,15 +307,11 @@ class _CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Agora Flutter QuickStart'),
-      ),
-      backgroundColor: Colors.black,
       body: Center(
         child: Stack(
           children: <Widget>[
             _viewRows(),
-            _panel(),
+            //_panel(),
             _toolbar(),
           ],
         ),

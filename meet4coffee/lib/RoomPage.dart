@@ -11,12 +11,10 @@ class RoomPage extends StatefulWidget {
   Profile user;
 
   @override
-  _RoomPageState createState() => _RoomPageState(user: user);
+  _RoomPageState createState() => _RoomPageState();
 }
 
 class _RoomPageState extends State<RoomPage> {
-  _RoomPageState({this.user});
-  Profile user;
   bool hasSelected = false;
   Widget selection = Container();
 
@@ -30,8 +28,6 @@ class _RoomPageState extends State<RoomPage> {
     final workspace = Provider.of<Workspace>(context);
     print(workspace.coffeeBreaks);
     double screenWidth = MediaQuery.of(context).size.width;
-    String roomName = "";
-    String role = "";
 
     return Scaffold(
       backgroundColor: mainBrown,
@@ -113,7 +109,9 @@ class _RoomPageState extends State<RoomPage> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Card(color: Colors.white70, child: profileTile(user)),
+                          Card(
+                              color: Colors.white70,
+                              child: profileTile(widget.user)),
                           Align(
                             alignment: Alignment.centerRight,
                             child: selection,
@@ -121,40 +119,42 @@ class _RoomPageState extends State<RoomPage> {
                         ],
                       ),
                     ))
-                  : ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        choiceCards(
-                          "Tea",
-                          EdgeInsets.only(right: 8),
-                          Colors.green,
-                          FontAwesomeIcons.leaf,
-                        ),
-                        choiceCards(
-                          "Coffee",
-                          EdgeInsets.only(left: 8),
-                          Colors.brown,
-                          FontAwesomeIcons.mugHot,
-                        ),
-                        choiceCards(
-                          "Water",
-                          EdgeInsets.only(right: 0),
-                          Colors.blue,
-                          FontAwesomeIcons.glassWhiskey,
-                        ),
-                        choiceCards(
-                          "Something Unusual",
-                          EdgeInsets.only(right: 0),
-                          Colors.grey,
-                          FontAwesomeIcons.question,
-                        ),
-                        choiceCards(
-                          "Not Thirsty",
-                          EdgeInsets.only(right: 0),
-                          Colors.black87,
-                          FontAwesomeIcons.stop,
-                        ),
-                      ],
+                  : Center(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          choiceCards(
+                            "Tea",
+                            EdgeInsets.only(right: 8),
+                            Colors.green,
+                            FontAwesomeIcons.leaf,
+                          ),
+                          choiceCards(
+                            "Coffee",
+                            EdgeInsets.only(left: 8),
+                            Colors.brown,
+                            FontAwesomeIcons.mugHot,
+                          ),
+                          choiceCards(
+                            "Water",
+                            EdgeInsets.only(right: 0),
+                            Colors.blue,
+                            FontAwesomeIcons.glassWhiskey,
+                          ),
+                          choiceCards(
+                            "Something Unusual",
+                            EdgeInsets.only(right: 0),
+                            Colors.grey,
+                            FontAwesomeIcons.question,
+                          ),
+                          choiceCards(
+                            "Not Thirsty",
+                            EdgeInsets.only(right: 0),
+                            Colors.black87,
+                            FontAwesomeIcons.stop,
+                          ),
+                        ],
+                      ),
                     ))
         ],
       );
@@ -178,7 +178,9 @@ class _RoomPageState extends State<RoomPage> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Card(color: Colors.white70, child: profileTile(user)),
+                          Card(
+                              color: Colors.white70,
+                              child: profileTile(widget.user)),
                           Align(
                             alignment: Alignment.centerRight,
                             child: selection,
@@ -231,7 +233,9 @@ class _RoomPageState extends State<RoomPage> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Card(color: Colors.white70, child: profileTile(user)),
+                          Card(
+                              color: Colors.white70,
+                              child: profileTile(widget.user)),
                           Align(
                             alignment: Alignment.centerRight,
                             child: selection,
@@ -384,11 +388,8 @@ class _RoomPageState extends State<RoomPage> {
     } else if (roomType == "Workout") {
       rooms = workspace.workoutBreaks;
     }
-    List roomList = [];
-
-    rooms.forEach((key, value) {
-      roomList.add(key);
-    });
+    List roomList = rooms.keys.toList();
+    roomList.sort((a, b) => a.compareTo(b));
 
     return ListView.builder(
       itemCount: roomList.length,
@@ -397,6 +398,8 @@ class _RoomPageState extends State<RoomPage> {
           index: index,
           roomList: roomList,
           rooms: rooms,
+          user: widget.user,
+          roomType: roomType,
         );
       },
     );

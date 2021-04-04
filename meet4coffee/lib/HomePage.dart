@@ -27,7 +27,13 @@ class _MyHomePageState extends State<MyHomePage> {
     double width = screenWidth * 0.90;
     double height = screenHeight * 0.10;
 
+    String name = "";
+    String role = "";
+    bool wfr = false;
+    final _formkey = GlobalKey<FormState>();
+
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: mainBrown,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -76,10 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  "Taking breaks has been shown to be important in recovering from stress [7], which can, in turn, improve your performance. Recovering from work stress can restore energy and mental resources and decrease the development of fatigue, sleep disorders and cardiovascular disease [2]. ",
+                  "It is important to take breaks when you're working from home and socialise to mitigate unnecessary stress. Meet4Coffee aims to provide this platform which allows employees to actively communicate with each other  in order to recover from stress and loneliness which can in turn, improve performance and long-term employee satisfaction!",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 15,
+                    letterSpacing: 0.5,
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
@@ -161,7 +168,87 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () => showDialog<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Profile'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          Form(
+                                            key: _formkey,
+                                            child: Column(
+                                              children: [
+                                                FadeIn(
+                                                  delay: 1,
+                                                  child: TextFormField(
+                                                    initialValue: user.name,
+                                                    decoration: InputDecoration(
+                                                      errorStyle: TextStyle(
+                                                          color: Colors.red),
+                                                      hintText: "Judge",
+                                                      labelText: "Name",
+                                                      fillColor: Colors.white,
+                                                      filled: true,
+                                                    ),
+                                                    validator: (val) => val
+                                                            .isEmpty
+                                                        ? 'Please enter a name'
+                                                        : null,
+                                                    onChanged: (val) {
+                                                      setState(
+                                                          () => name = val);
+                                                    },
+                                                  ),
+                                                ),
+                                                FadeIn(
+                                                  delay: 1,
+                                                  child: TextFormField(
+                                                    initialValue: user.role,
+                                                    decoration: InputDecoration(
+                                                      errorStyle: TextStyle(
+                                                          color: Colors.red),
+                                                      hintText:
+                                                          "Hackiethon Judge",
+                                                      labelText: "Role",
+                                                      fillColor: Colors.white,
+                                                      filled: true,
+                                                    ),
+                                                    validator: (val) => val
+                                                            .isEmpty
+                                                        ? 'Please enter a role'
+                                                        : null,
+                                                    onChanged: (val) {
+                                                      setState(
+                                                          () => role = val);
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Approve'),
+                                        onPressed: () {
+                                          if (_formkey.currentState
+                                              .validate()) {
+                                            setState(() {
+                                              user.name = name;
+                                              user.role = role;
+                                            });
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                               child: Container(
                                 height: 70,
                                 width: screenWidth * 0.7,
