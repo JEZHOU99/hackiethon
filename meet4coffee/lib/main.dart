@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meet4coffee/animations.dart';
 import 'package:meet4coffee/utilities.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'HomePage.dart';
 
@@ -9,25 +10,40 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<FirebaseApp> initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Co lors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: FutureBuilder(
+        // Initialize FlutterFire:
+        future: initialization,
+        builder: (context, snapshot) {
+          // Check for errors
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+
+          // Once complete, show your application
+          if (snapshot.connectionState == ConnectionState.done) {
+            return LoginPage();
+          }
+
+          // Otherwise, show something whilstF waiting for initialization to complete
+          return Loading();
+        },
+      ),
     );
   }
 }
@@ -174,5 +190,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Center(child: CircularProgressIndicator()));
   }
 }

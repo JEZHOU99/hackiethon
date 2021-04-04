@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "402905975706",
+    "project_id": "meet4coffee-d37a0",
+    "storage_bucket": "meet4coffee-d37a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402905975706:android:2ab206439b0abfd81fc823",
+        "android_client_info": {
+          "package_name": "com.example.meet4coffee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402905975706-95k9f1akn06cv4ml532et6js2ng60fro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO3raKpB0nk0KN5lDQFdaDBS2gEY_J1os"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402905975706-95k9f1akn06cv4ml532et6js2ng60fro.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
